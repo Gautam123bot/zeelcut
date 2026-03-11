@@ -19,11 +19,11 @@ RUN npx prisma generate
 COPY . .
 
 # Build TypeScript
-# RUN npm run build
+RUN npm run build
 
 # Set environment variables
 ENV PORT=5000
 EXPOSE 5000
 
 # Run compiled server
-CMD ["npm","run","dev"]
+CMD ["npm","run","start"]
