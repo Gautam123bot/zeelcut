@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   useGetChatQuery,
   useSendMessageMutation,
-  useUpdateChatStatusMutation,
+  // useUpdateChatStatusMutation,
 } from "@/app/store/apis/ChatApi";
 import { useSocketConnection } from "../useSocketConnection";
 import { useChatMessages } from "../useChatMessages";
@@ -30,21 +30,20 @@ interface ChatContainerProps {
 const ChatContainer: React.FC<ChatContainerProps> = ({ chatId }) => {
   const { data: userData } = useGetMeQuery(undefined);
   const user = userData?.user;
-  if (!user) return <CustomLoader />;
-
+  
   const { data, isLoading, error } = useGetChatQuery(chatId);
   const chat = data?.chat;
 
   const [sendMessage] = useSendMessageMutation();
-  const [updateChatStatus] = useUpdateChatStatusMutation();
+  // const [updateChatStatus] = useUpdateChatStatusMutation();
 
   const socket = useSocketConnection(chatId);
 
   const { messages, message, setMessage, handleSendMessage, isTyping } =
-    useChatMessages(chatId, user, chat, socket, sendMessage);
+  useChatMessages(chatId, user!, chat, socket, sendMessage);
 
   const { callStatus, endCall } = useWebRTCCall({ chatId, socket });
-
+  
   // const handleResolveChat = async () => {
   //   try {
   //     await updateChatStatus({ chatId, status: "RESOLVED" }).unwrap();
@@ -53,6 +52,7 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ chatId }) => {
   //   }
   // };
 
+  if (!user) return <CustomLoader />;
   // Loading state
   if (isLoading) {
     return <ChatSkeletonLoader />;

@@ -13,7 +13,7 @@ interface MessageGroupProps {
 const MessageGroup: React.FC<MessageGroupProps> = ({
   messages,
   isCurrentUser,
-  currentUserId
+  // currentUserId
 }) => {
   return (
     <div className={`flex ${isCurrentUser ? 'justify-end' : 'justify-start'}`}>

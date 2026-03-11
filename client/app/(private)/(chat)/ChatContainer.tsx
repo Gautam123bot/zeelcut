@@ -25,17 +25,16 @@ interface ChatProps {
 const ChatContainer: React.FC<ChatProps> = ({ chatId }) => {
   const { data: userData } = useGetMeQuery(undefined);
   const user = userData?.user;
-  if (!user) return <CustomLoader />;
   const { data, isLoading, error } = useGetChatQuery(chatId);
   const chat = data?.chat;
-
+  
   const [sendMessage] = useSendMessageMutation();
   const [updateChatStatus] = useUpdateChatStatusMutation();
 
   const socket = useSocketConnection(chatId);
-
+  
   const { messages, message, setMessage, handleSendMessage, isTyping } =
-    useChatMessages(chatId, user, chat, socket, sendMessage);
+  useChatMessages(chatId, user!, chat, socket, sendMessage);
 
   const { callStatus, endCall } = useWebRTCCall({ chatId, socket });
 
@@ -46,7 +45,8 @@ const ChatContainer: React.FC<ChatProps> = ({ chatId }) => {
       console.error("Failed to resolve chat:", err);
     }
   };
-
+  
+  if (!user) return <CustomLoader />;
   if (isLoading) {
     return <CustomLoader />;
   }

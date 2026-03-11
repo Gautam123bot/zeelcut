@@ -24,7 +24,7 @@ type TabType = "notes" | "calls" | "settings" | "analytics";
 const ChatTabs: React.FC<ChatTabsProps> = ({
   isOpen,
   onClose,
-  chat,
+  // chat,
   onResolve,
   canResolve = false,
 }) => {

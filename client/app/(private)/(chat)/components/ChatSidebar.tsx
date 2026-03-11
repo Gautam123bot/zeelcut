@@ -27,9 +27,9 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({
   onClose,
   isMobile,
 }) => {
-  const { data: userData } = useGetMeQuery(undefined);
+  // const { data: userData } = useGetMeQuery(undefined);
   const { data: chatData } = useGetChatQuery(chatId);
-  const user = userData?.user;
+  // const user = userData?.user;
   const chat = chatData?.chat;
 
   const formatDate = (dateString: string) => {
