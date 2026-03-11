@@ -6,14 +6,18 @@ export class SocketManager {
 
   constructor(httpServer: HTTPServer) {
     this.io = new SocketIOServer(httpServer, {
-      cors: {
-        origin:
-          process.env.NODE_ENV === "production"
-            ? ["https://zeelcut-production.up.railway.app/", "https://zeelcut-production-e823.up.railway.app"]
-            : ["http://localhost:3000", "http://localhost:5173"],
-        methods: ["GET", "POST"],
-        credentials: true,
-      },
+      // cors: {
+      //   origin:
+      //     process.env.NODE_ENV === "production"
+      //       ? ["https://zeelcut-production.up.railway.app/", "https://zeelcut-production-e823.up.railway.app"]
+      //       : ["http://localhost:3000", "http://localhost:5173"],
+      //   methods: ["GET", "POST"],
+      //   credentials: true,
+      // },
+      cors: ({
+        origin: true,
+        credentials: true
+      })
     });
 
     this.io.on("connection", (socket: Socket) => {

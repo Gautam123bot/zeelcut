@@ -34,22 +34,26 @@ export const createApp = async () => {
   const app = express();
 
   // CORS must be applied BEFORE GraphQL setup
-  app.use(
-    cors({
-      origin:
-        process.env.NODE_ENV === "production"
-          ? ["https://zeelcut-production.up.railway.app/", "https://zeelcut-production-e823.up.railway.app"]
-          : ["http://localhost:3000", "http://localhost:5173"],
-      credentials: true,
-      methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-      allowedHeaders: [
-        "Content-Type",
-        "Authorization",
-        "X-Requested-With",
-        "Apollo-Require-Preflight", // For GraphQL
-      ],
-    })
-  );
+  // app.use(
+  //   cors({
+  //     origin:
+  //       process.env.NODE_ENV === "production"
+  //         ? ["https://zeelcut-production.up.railway.app/", "https://zeelcut-production-e823.up.railway.app"]
+  //         : ["http://localhost:3000", "http://localhost:5173"],
+  //     credentials: true,
+  //     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  //     allowedHeaders: [
+  //       "Content-Type",
+  //       "Authorization",
+  //       "X-Requested-With",
+  //       "Apollo-Require-Preflight", // For GraphQL
+  //     ],
+  //   })
+  // );
+  app.use(cors({
+    origin: true,
+    credentials: true
+  }))
 
   try {
     await connectDB();

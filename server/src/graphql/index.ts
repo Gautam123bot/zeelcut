@@ -17,18 +17,20 @@ export async function configureGraphQL(app: express.Application) {
   app.use(
     "/api/v1/graphql",
     cors({
-      origin:
-        process.env.NODE_ENV === "production"
-          ? ["https://zeelcut-production.up.railway.app/", "https://zeelcut-production-e823.up.railway.app"]
-          : ["http://localhost:3000", "http://localhost:5173"],
-      credentials: true,
-      methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-      allowedHeaders: [
-        "Content-Type",
-        "Authorization",
-        "X-Requested-With",
-        "Apollo-Require-Preflight",
-      ],
+      // origin:
+      //   process.env.NODE_ENV === "production"
+      //     ? ["https://zeelcut-production.up.railway.app/", "https://zeelcut-production-e823.up.railway.app"]
+      //     : ["http://localhost:3000", "http://localhost:5173"],
+      // credentials: true,
+      // methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+      // allowedHeaders: [
+      //   "Content-Type",
+      //   "Authorization",
+      //   "X-Requested-With",
+      //   "Apollo-Require-Preflight",
+      // ],
+      origin: true,
+      credentials: true
     }),
     bodyParser.json(),
     expressMiddleware(apolloServer, {
