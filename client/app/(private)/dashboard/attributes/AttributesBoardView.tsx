@@ -11,9 +11,15 @@ import {
 } from "@/app/store/apis/AttributeApi";
 import useToast from "@/app/hooks/ui/useToast";
 import ConfirmModal from "@/app/components/organisms/ConfirmModal";
+import { Attribute } from "./attributes";
 
-const AttributesBoardView = ({ attributes = [] }) => {
-  const { showToast } = useToast();
+interface AttributesBoardViewProps {
+  attributes?: Attribute[];
+}
+
+const AttributesBoardView: React.FC<AttributesBoardViewProps> = ({
+  attributes = [],
+}) => {  const { showToast } = useToast();
   const [createAttributeValue, { isLoading: isCreatingValue }] =
     useCreateAttributeValueMutation();
   const [deleteAttribute, { error: deleteAttributeError }] =
