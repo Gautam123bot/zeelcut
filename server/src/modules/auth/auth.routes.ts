@@ -23,27 +23,27 @@ const env = process.env.NODE_ENV;
  *       302:
  *         description: Redirect to Google login page.
  */
-router.get("/google", handleSocialLogin("google"));
-router.get(
-  "/google/callback",
-  passport.authenticate("google", {
-    session: false,
-    failureRedirect: env === "production" ? CLIENT_URL_PROD : CLIENT_URL_DEV,
-  }),
-  async (req: any, res: any) => {
-    const user = req.user;
-    const { accessToken, refreshToken } = user;
+// router.get("/google", handleSocialLogin("google"));
+// router.get(
+//   "/google/callback",
+//   passport.authenticate("google", {
+//     session: false,
+//     failureRedirect: env === "production" ? CLIENT_URL_PROD : CLIENT_URL_DEV,
+//   }),
+//   async (req: any, res: any) => {
+//     const user = req.user;
+//     const { accessToken, refreshToken } = user;
 
-    res.cookie("refreshToken", refreshToken, cookieOptions);
-    res.cookie("accessToken", accessToken, cookieOptions);
+//     res.cookie("refreshToken", refreshToken, cookieOptions);
+//     res.cookie("accessToken", accessToken, cookieOptions);
 
-    const userId = user.id;
-    const sessionId = req.session.id;
-    await cartService?.mergeCartsOnLogin(sessionId, userId);
+//     const userId = user.id;
+//     const sessionId = req.session.id;
+//     await cartService?.mergeCartsOnLogin(sessionId, userId);
 
-    res.redirect(env === "production" ? CLIENT_URL_PROD : CLIENT_URL_DEV);
-  }
-);
+//     res.redirect(env === "production" ? CLIENT_URL_PROD : CLIENT_URL_DEV);
+//   }
+// );
 /**
  * @swagger
  * /google/callback:
@@ -65,27 +65,27 @@ router.get(
  *       302:
  *         description: Redirect to Facebook login page.
  */
-router.get("/facebook", handleSocialLogin("facebook"));
-router.get(
-  "/facebook/callback",
-  passport.authenticate("facebook", {
-    session: false,
-    failureRedirect: env === "production" ? CLIENT_URL_PROD : CLIENT_URL_DEV,
-  }),
-  async (req: any, res: any) => {
-    const user = req.user;
-    const { accessToken, refreshToken } = user;
+// router.get("/facebook", handleSocialLogin("facebook"));
+// router.get(
+//   "/facebook/callback",
+//   passport.authenticate("facebook", {
+//     session: false,
+//     failureRedirect: env === "production" ? CLIENT_URL_PROD : CLIENT_URL_DEV,
+//   }),
+//   async (req: any, res: any) => {
+//     const user = req.user;
+//     const { accessToken, refreshToken } = user;
 
-    res.cookie("refreshToken", refreshToken, cookieOptions);
-    res.cookie("accessToken", accessToken, cookieOptions);
+//     res.cookie("refreshToken", refreshToken, cookieOptions);
+//     res.cookie("accessToken", accessToken, cookieOptions);
 
-    const userId = user.id;
-    const sessionId = req.session.id;
-    await cartService?.mergeCartsOnLogin(sessionId, userId);
+//     const userId = user.id;
+//     const sessionId = req.session.id;
+//     await cartService?.mergeCartsOnLogin(sessionId, userId);
 
-    res.redirect(env === "production" ? CLIENT_URL_PROD : CLIENT_URL_DEV);
-  }
-);
+//     res.redirect(env === "production" ? CLIENT_URL_PROD : CLIENT_URL_DEV);
+//   }
+// );
 /**
  * @swagger
  * /facebook/callback:
@@ -107,37 +107,37 @@ router.get(
  *       302:
  *         description: Redirect to Twitter login page.
  */
-router.get(
-  "/twitter",
-  passport.authenticate("twitter", {
-    session: false,
-    scope: ["email"],
-  })
-);
-router.get(
-  "/twitter/callback",
-  passport.authenticate("twitter", {
-    session: false,
-    failureRedirect: `${
-      env === "production" ? CLIENT_URL_PROD : CLIENT_URL_DEV
-    }?error=auth_failed`,
-  }),
-  async (req: any, res: any) => {
-    const user = req.user;
-    const { accessToken, refreshToken } = user;
+// router.get(
+//   "/twitter",
+//   passport.authenticate("twitter", {
+//     session: false,
+//     scope: ["email"],
+//   })
+// );
+// router.get(
+//   "/twitter/callback",
+//   passport.authenticate("twitter", {
+//     session: false,
+//     failureRedirect: `${
+//       env === "production" ? CLIENT_URL_PROD : CLIENT_URL_DEV
+//     }?error=auth_failed`,
+//   }),
+//   async (req: any, res: any) => {
+//     const user = req.user;
+//     const { accessToken, refreshToken } = user;
 
-    console.log("Twitter callback user:", user);
+//     console.log("Twitter callback user:", user);
 
-    res.cookie("refreshToken", refreshToken, cookieOptions);
-    res.cookie("accessToken", accessToken, cookieOptions);
+//     res.cookie("refreshToken", refreshToken, cookieOptions);
+//     res.cookie("accessToken", accessToken, cookieOptions);
 
-    const userId = user.id;
-    const sessionId = req.session.id;
-    await cartService?.mergeCartsOnLogin(sessionId, userId);
+//     const userId = user.id;
+//     const sessionId = req.session.id;
+//     await cartService?.mergeCartsOnLogin(sessionId, userId);
 
-    res.redirect(env === "production" ? CLIENT_URL_PROD : CLIENT_URL_DEV);
-  }
-);
+//     res.redirect(env === "production" ? CLIENT_URL_PROD : CLIENT_URL_DEV);
+//   }
+// );
 /**
  * @swagger
  * /twitter/callback:
