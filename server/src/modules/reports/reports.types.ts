@@ -32,7 +32,7 @@ export interface UserRetentionReport {
   topUsers: {
     userId: string;
     name: string;
-    email: string;
+    phone: string;
     orderCount: number;
     totalSpent: number;
   }[];
