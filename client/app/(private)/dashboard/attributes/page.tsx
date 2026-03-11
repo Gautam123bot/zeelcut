@@ -20,10 +20,19 @@ const AttributesDashboard: React.FC = () => {
     );
   }
 
+  const getErrorMessage = (error: any) => {
+    if (!error) return "Unknown error";
+
+    if ("status" in error) {
+      return (error.data as any)?.message || "Server error";
+    }
+
+    return error.message || "Unknown error";
+  };
   if (error) {
     return (
       <div className="p-6 text-red-600 bg-red-50 rounded-lg">
-        Error loading attributes: {error.message ?? "Unknown error"}
+        Error loading attributes: {getErrorMessage(error)}
       </div>
     );
   }

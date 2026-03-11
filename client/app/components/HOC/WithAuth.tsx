@@ -3,7 +3,7 @@ import CustomLoader from "../feedback/CustomLoader";
 import { useAuth } from "@/app/hooks/useAuth";
 import { useEffect } from "react";
 
-export function withAuth<P extends Record<string, unknown>>(
+export function withAuth<P extends object>(
   Component: React.ComponentType<P>
 ) {
   return function AuthWrapper(props: P) {

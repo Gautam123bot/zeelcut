@@ -296,4 +296,4 @@ const UserOrders = () => {
   );
 };
 
-export default withAuth(UserOrders) as React.ComponentType;
+export default withAuth(UserOrders);

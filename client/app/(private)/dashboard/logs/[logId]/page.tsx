@@ -25,7 +25,7 @@ interface LogDetailsProps {
 }
 
 const LogDetails: React.FC<LogDetailsProps> = ({ params }) => {
-  const { logId } = React.use(params);
+  const { logId } = params;
   const router = useRouter();
   const { data, isLoading, error } = useGetLogByIdQuery(logId);
 
