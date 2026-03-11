@@ -5,7 +5,7 @@ const getBaseURL = () => {
   if (typeof window !== "undefined") {
     // Client-side: use environment variables
     return process.env.NODE_ENV === "production"
-      ? "https://full-stack-ecommerce-n5at.onrender.com/api/v1"
+      ? "https://zeelcut-production-e823.up.railway.app/api/v1"
       : "http://localhost:5000/api/v1";
   }
   // Server-side: default to development
