@@ -36,7 +36,7 @@ const AttributeCard = ({
     onAddValue(attribute.id);
     setShowAddForm(false);
   };
-
+  const values = attribute.values ?? [];
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-300">
       {/* Card Header */}
@@ -101,7 +101,7 @@ const AttributeCard = ({
       <div className="p-4">
         <div className="flex items-center justify-between mb-4">
           <span className="text-sm font-medium text-gray-700">
-            Values ({attribute.values?.length || 0})
+            Values ({values.length})
           </span>
           <button
             onClick={() => setShowAddForm(!showAddForm)}
@@ -117,7 +117,7 @@ const AttributeCard = ({
         {isExpanded && (
           <div className="space-y-2 mb-4">
             {(attribute.values || []).length > 0 ? (
-              attribute.values.map((value) => (
+              values.map((value) => (
                 <div
                   key={value.id}
                   className="flex items-center justify-between p-2 bg-gray-50 rounded-md border border-gray-200"
@@ -141,9 +141,9 @@ const AttributeCard = ({
         )}
 
         {/* Quick Preview of Values */}
-        {!isExpanded && attribute.values?.length > 0 && (
+        {!isExpanded && values.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-4">
-            {attribute.values.slice(0, 3).map((value) => (
+            {values.slice(0, 3).map((value) => (
               <span
                 key={value.id}
                 className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full"
@@ -151,9 +151,9 @@ const AttributeCard = ({
                 {value.value}
               </span>
             ))}
-            {attribute.values.length > 3 && (
+            {values.length > 3 && (
               <span className="px-2 py-1 bg-gray-100 text-gray-500 text-xs rounded-full">
-                +{attribute.values.length - 3} more
+                +{values.length - 3} more
               </span>
             )}
           </div>
