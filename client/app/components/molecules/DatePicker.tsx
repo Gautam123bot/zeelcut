@@ -90,13 +90,22 @@ const DatePicker = ({
     }
   };
 
-  const handleMonthSelect = (selectedMonth: {
-    label: string;
-    value: string;
-  }) => {
-    if (selectedMonth !== null) {
-      const monthIndex = months.indexOf(selectedMonth);
-      setCurrentMonth(new Date(currentMonth.getFullYear(), monthIndex, 1));
+  // const handleMonthSelect = (selectedMonth: {
+  //   label: string;
+  //   value: string;
+  // }) => {
+  //   if (selectedMonth !== null) {
+  //     const monthIndex = months.indexOf(selectedMonth);
+  //     setCurrentMonth(new Date(currentMonth.getFullYear(), monthIndex, 1));
+  //   }
+  // };
+  const handleMonthSelect = (value: string | null) => {
+    if (value !== null) {
+      const monthIndex = months.findIndex((m) => m.value === value);
+
+      if (monthIndex !== -1) {
+        setCurrentMonth(new Date(currentMonth.getFullYear(), monthIndex, 1));
+      }
     }
   };
 

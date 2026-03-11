@@ -14,7 +14,7 @@ const getNestedValue = (obj: any, key: string): any => {
 interface Column {
   key: string;
   label: string;
-  Ascendantly;
+  // Ascendantly;
   sortable?: boolean;
   render?: (row: any) => React.ReactNode;
   width?: string;

@@ -11,6 +11,7 @@ export interface Item {
   primaryInfo: string;
   secondaryInfo: string;
   image: string;
+  slug: string;
 }
 
 interface ListCardProps {

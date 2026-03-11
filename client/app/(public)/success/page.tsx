@@ -36,6 +36,7 @@ const SuccessPage = () => {
       title: "Password Reset Successful!",
       description:
         "Your password has been successfully reset. You can now log in with your new password.",
+      details: undefined,
       primaryAction: { text: "Sign In", href: "/sign-in", icon: ArrowRight },
       secondaryAction: { text: "Go Home", href: "/", icon: Home },
       nextSteps: [
@@ -49,6 +50,7 @@ const SuccessPage = () => {
       title: "Email Verified!",
       description:
         "Your email address has been successfully verified. Your account is now fully activated.",
+      details: undefined,
       primaryAction: {
         text: "Go to Dashboard",
         href: "/dashboard",
@@ -70,6 +72,7 @@ const SuccessPage = () => {
       title: "Profile Updated!",
       description:
         "Your profile has been successfully updated. Your changes are now saved.",
+      details: undefined,
       primaryAction: {
         text: "View Profile",
         href: "/profile",

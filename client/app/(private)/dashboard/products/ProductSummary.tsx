@@ -12,6 +12,12 @@ interface ProductSummaryProps {
     categoryId: string;
   };
   categories: { label: string; value: string }[];
+  selectedVariant: any;
+  attributeGroups: any;
+  selectedAttributes: Record<string, string>;
+
+  onVariantChange: (attributeName: string, value: string) => void;
+  resetSelections: () => void;
   isUpdating: boolean;
   onSave: () => void;
 }

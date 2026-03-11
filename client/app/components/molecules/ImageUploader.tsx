@@ -7,6 +7,7 @@ import {
   Control,
   FieldErrors,
   UseFormSetValue,
+  UseFormWatch
 } from "react-hook-form";
 import { useEffect, useState, useCallback } from "react";
 
@@ -14,10 +15,12 @@ interface ImageUploaderProps {
   control: Control<any>;
   errors: FieldErrors<any>;
   setValue: UseFormSetValue<any>;
+  watch?: UseFormWatch<any>;
   label: string;
   name?: string;
   maxFiles?: number;
   disabled?: boolean;
+  existingImages?: string[];
 }
 
 interface ImagePreview {

@@ -34,7 +34,7 @@ const toastVariants = {
 const Toast = () => {
   const dispatch = useAppDispatch();
   const { toasts } = useAppSelector((state) => state.toasts);
-  const timeoutRefs = useRef({});
+  const timeoutRefs = useRef<Record<number, ReturnType<typeof setTimeout>>>({});
 
   useEffect(() => {
     toasts.forEach((toast) => {
