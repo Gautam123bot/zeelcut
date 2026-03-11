@@ -8,7 +8,7 @@ import {
   Paperclip, 
   Smile, 
   X, 
-  Check,
+  // Check,
   Pause,
   Square
 } from "lucide-react";
@@ -16,7 +16,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 interface ChatInputProps {
   message: string;
-  setMessage: (message: string) => void;
+  setMessage: React.Dispatch<React.SetStateAction<string>>
   onSendMessage: (file?: File, content?: string) => void;
   disabled?: boolean;
   isTyping?: boolean;
@@ -32,7 +32,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
   const [recording, setRecording] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  // const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const [recordingTime, setRecordingTime] = useState(0);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
@@ -45,11 +45,12 @@ const ChatInput: React.FC<ChatInputProps> = ({
   useEffect(() => {
     if (selectedFile) {
       const url = URL.createObjectURL(selectedFile);
-      setPreviewUrl(url);
+      // setPreviewUrl(url);
       return () => URL.revokeObjectURL(url);
-    } else {
-      setPreviewUrl(null);
-    }
+    } 
+    // else {
+      // setPreviewUrl(null);
+    // }
   }, [selectedFile]);
 
   // Recording timer
@@ -122,26 +123,26 @@ const ChatInput: React.FC<ChatInputProps> = ({
   const cancelMedia = () => {
     setSelectedFile(null);
     setAudioBlob(null);
-    setPreviewUrl(null);
+    // setPreviewUrl(null);
     if (mediaRecorder) {
       stopRecording();
     }
   };
 
-  const confirmSend = () => {
-    if (selectedFile) {
-      onSendMessage(selectedFile, message);
-      setSelectedFile(null);
-      setPreviewUrl(null);
-    } else if (audioBlob) {
-      const file = new File([audioBlob], "voice_message.mp3", {
-        type: "audio/mp3",
-      });
-      onSendMessage(file, message);
-      setAudioBlob(null);
-    }
-    setMessage("");
-  };
+  // const confirmSend = () => {
+  //   if (selectedFile) {
+  //     onSendMessage(selectedFile, message);
+  //     setSelectedFile(null);
+  //     // setPreviewUrl(null);
+  //   } else if (audioBlob) {
+  //     const file = new File([audioBlob], "voice_message.mp3", {
+  //       type: "audio/mp3",
+  //     });
+  //     onSendMessage(file, message);
+  //     setAudioBlob(null);
+  //   }
+  //   setMessage("");
+  // };
 
   const handleSend = () => {
     if (message.trim() || selectedFile || audioBlob) {
@@ -149,7 +150,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
       setMessage("");
       setSelectedFile(null);
       setAudioBlob(null);
-      setPreviewUrl(null);
+      // setPreviewUrl(null);
     }
   };
 

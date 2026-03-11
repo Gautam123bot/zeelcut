@@ -13,7 +13,7 @@ import {
   Plus,
 } from "lucide-react";
 import { motion } from "framer-motion";
-import { useGetMeQuery } from "@/app/store/apis/UserApi";
+// import { useGetMeQuery } from "@/app/store/apis/UserApi";
 import { useGetChatQuery } from "@/app/store/apis/ChatApi";
 
 interface ChatSidebarProps {
