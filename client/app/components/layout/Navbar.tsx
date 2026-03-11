@@ -7,7 +7,6 @@ import {
   ShoppingCart,
   Menu,
   X,
-  CircleUserRound,
   Search,
   LogOut,
 } from "lucide-react";

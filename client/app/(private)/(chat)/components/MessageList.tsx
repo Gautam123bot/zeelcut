@@ -2,7 +2,6 @@
 
 import React, { useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import MessageItem from "./MessageItem";
 import MessageGroup from "./MessageGroup";
 
 interface MessageListProps {

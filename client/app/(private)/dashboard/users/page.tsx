@@ -49,7 +49,7 @@ const UsersDashboard = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCreateAdminModalOpen, setIsCreateAdminModalOpen] = useState(false);
-  const [editingUser, setEditingUser] = useState<UserFormData | null>(null);
+  // const [editingUser, setEditingUser] = useState<UserFormData | null>(null);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [userToDelete, setUserToDelete] = useState<string | number | null>(
     null
@@ -59,7 +59,7 @@ const UsersDashboard = () => {
     defaultValues: {
       id: "",
       name: "",
-      email: "",
+      phone: "",
       role: "USER",
       emailVerified: false,
     },
@@ -68,7 +68,7 @@ const UsersDashboard = () => {
   const createAdminForm = useForm<CreateAdminFormData>({
     defaultValues: {
       name: "",
-      email: "",
+      phone: "",
       password: "",
       confirmPassword: "",
     },
@@ -189,7 +189,7 @@ const UsersDashboard = () => {
             <AdminActionGuard action="update_user" showFallback={false}>
               <button
                 onClick={() => {
-                  setEditingUser(row);
+                  // setEditingUser(row);
                   form.reset(row);
                   setIsModalOpen(true);
                 }}
@@ -231,7 +231,7 @@ const UsersDashboard = () => {
     try {
       await updateUser(data).unwrap();
       setIsModalOpen(false);
-      setEditingUser(null);
+      // setEditingUser(null);
       showToast("User updated successfully", "success");
     } catch (err: any) {
       console.error("Failed to update user:", err);
@@ -242,8 +242,8 @@ const UsersDashboard = () => {
 
   const handleCreateAdminSubmit = async (data: CreateAdminFormData) => {
     try {
-      const { name, email, password } = data;
-      await createAdmin({ name, email, password }).unwrap();
+      const { name, phone, password } = data;
+      await createAdmin({ name, phone, password }).unwrap();
       setIsCreateAdminModalOpen(false);
       createAdminForm.reset();
       showToast("Admin created successfully", "success");

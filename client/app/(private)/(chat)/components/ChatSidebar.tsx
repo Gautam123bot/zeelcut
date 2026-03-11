@@ -4,7 +4,7 @@ import React from "react";
 import {
   X,
   User,
-  Clock,
+  // Clock,
   MessageCircle,
   Phone,
   Video,

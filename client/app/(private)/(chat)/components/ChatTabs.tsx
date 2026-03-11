@@ -8,8 +8,6 @@ import {
   Video,
   Settings,
   X,
-  MessageSquare,
-  Users,
   BarChart3,
 } from "lucide-react";
 

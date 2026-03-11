@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { Clock, CheckCircle, XCircle, AlertCircle, Wifi, WifiOff } from "lucide-react";
+import { Wifi, WifiOff } from "lucide-react";
 
 interface ChatStatusProps {
   isTyping?: boolean;

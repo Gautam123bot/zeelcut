@@ -21,6 +21,7 @@ import CallConnectingScreen from "../CallConnectingScreen";
 import CallInProgressScreen from "../CallInProgressScreen";
 import ChatSkeletonLoader from "./ChatSkeletonLoader";
 import ErrorDisplay from "./ErrorDisplay";
+import CustomLoader from "@/app/components/feedback/CustomLoader";
 
 interface ChatContainerProps {
   chatId: string;
@@ -29,6 +30,7 @@ interface ChatContainerProps {
 const ChatContainer: React.FC<ChatContainerProps> = ({ chatId }) => {
   const { data: userData } = useGetMeQuery(undefined);
   const user = userData?.user;
+  if (!user) return <CustomLoader />;
 
   const { data, isLoading, error } = useGetChatQuery(chatId);
   const chat = data?.chat;
@@ -43,13 +45,13 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ chatId }) => {
 
   const { callStatus, endCall } = useWebRTCCall({ chatId, socket });
 
-  const handleResolveChat = async () => {
-    try {
-      await updateChatStatus({ chatId, status: "RESOLVED" }).unwrap();
-    } catch (err) {
-      console.error("Failed to resolve chat:", err);
-    }
-  };
+  // const handleResolveChat = async () => {
+  //   try {
+  //     await updateChatStatus({ chatId, status: "RESOLVED" }).unwrap();
+  //   } catch (err) {
+  //     console.error("Failed to resolve chat:", err);
+  //   }
+  // };
 
   // Loading state
   if (isLoading) {
@@ -61,9 +63,9 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ chatId }) => {
     return <ErrorDisplay error={error} />;
   }
 
-  const canResolve =
-    (user?.role === "ADMIN" || user?.role === "SUPERADMIN") &&
-    chat?.status === "OPEN";
+  // const canResolve =
+  //   (user?.role === "ADMIN" || user?.role === "SUPERADMIN") &&
+  //   chat?.status === "OPEN";
 
   return (
     <ChatLayout chatId={chatId}>

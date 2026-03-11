@@ -69,11 +69,11 @@ const AttributeAssignment: React.FC<AttributeAssignmentProps> = ({
       value: cat.id,
     })) || [];
 
-  const productOptions =
-    productsData?.products?.map((prod: any) => ({
-      label: prod.name,
-      value: prod.id,
-    })) || [];
+  // const productOptions =
+  //   productsData?.products?.map((prod: any) => ({
+  //     label: prod.name,
+  //     value: prod.id,
+  //   })) || [];
 
   // Handle category assignment
   const onAssignToCategory = async (data: AssignFormData) => {
@@ -98,27 +98,27 @@ const AttributeAssignment: React.FC<AttributeAssignmentProps> = ({
   };
 
   // Handle product assignment
-  const onAssignToProduct = async (data: AssignFormData) => {
-    if (!data.attributeId || !data.productId) {
-      showToast("Please select an attribute and product", "error");
-      return;
-    }
+  // const onAssignToProduct = async (data: AssignFormData) => {
+  //   if (!data.attributeId || !data.productId) {
+  //     showToast("Please select an attribute and product", "error");
+  //     return;
+  //   }
 
-    try {
-      await assignAttributeToProduct({
-        attributeId: data.attributeId,
-        productId: data.productId,
-      });
-      showToast("Attribute assigned to product successfully", "success");
-      setValue("productId", "");
-    } catch (err) {
-      console.error("Error assigning to product:", err);
-      showToast("Failed to assign attribute to product", "error");
-    }
-  };
+  //   try {
+  //     await assignAttributeToProduct({
+  //       attributeId: data.attributeId,
+  //       productId: data.productId,
+  //     });
+  //     showToast("Attribute assigned to product successfully", "success");
+  //     setValue("productId", "");
+  //   } catch (err) {
+  //     console.error("Error assigning to product:", err);
+  //     showToast("Failed to assign attribute to product", "error");
+  //   }
+  // };
 
-  const handleAttributeChange = (value: string) => {
-    setValue("attributeId", value);
+  const handleAttributeChange = (value: string | null) => {
+    setValue("attributeId", value || "");
     setValue("categoryId", "");
     setValue("productId", "");
     setValue("isRequired", false);

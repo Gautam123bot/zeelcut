@@ -39,7 +39,7 @@ const emailSchema = (value: string) => {
 
 const Signup = () => {
   const [sendPhoneOtp] = useSendPhoneOtpMutation();
-  const [signUp, { isLoading, error }] = useSignupMutation();
+  const [signUp, { isLoading }] = useSignupMutation();
   // const [sendOtp] = useSendOtpMutation();
   const [otpSent, setOtpSent] = useState(false);
   const router = useRouter();

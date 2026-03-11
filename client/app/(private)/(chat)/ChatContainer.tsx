@@ -25,7 +25,7 @@ interface ChatProps {
 const ChatContainer: React.FC<ChatProps> = ({ chatId }) => {
   const { data: userData } = useGetMeQuery(undefined);
   const user = userData?.user;
-
+  if (!user) return <CustomLoader />;
   const { data, isLoading, error } = useGetChatQuery(chatId);
   const chat = data?.chat;
 
@@ -62,7 +62,7 @@ const ChatContainer: React.FC<ChatProps> = ({ chatId }) => {
   }
 
   const canResolve =
-    (user.role === "ADMIN" || user.role === "SUPERADMIN") &&
+    (user?.role === "ADMIN" || user?.role === "SUPERADMIN") &&
     chat?.status === "OPEN";
 
   return (
