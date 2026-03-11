@@ -33,22 +33,40 @@ dotenv.config();
 export const createApp = async () => {
   const app = express();
 
+  // CORS must be applied BEFORE GraphQL setup
+  app.use(
+    cors({
+      origin:
+        process.env.NODE_ENV === "production"
+          ? ["https://zeelcut-production.up.railway.app/", "https://zeelcut-production-e823.up.railway.app"]
+          : ["http://localhost:3000", "http://localhost:5173"],
+      credentials: true,
+      methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+      allowedHeaders: [
+        "Content-Type",
+        "Authorization",
+        "X-Requested-With",
+        "Apollo-Require-Preflight", // For GraphQL
+      ],
+    })
+  );
+
   try {
     await connectDB();
     console.log("✅ DB connected");
   } catch (err) {
     console.error("❌ Failed to connect to DB:", err);
   }
-
+  
   const httpServer = new HTTPServer(app);
-
+  
   // Initialize Socket.IO
   const socketManager = new SocketManager(httpServer);
   const io = socketManager.getIO();
-
+  
   // Swagger Documentation
   setupSwagger(app);
-
+  
   // Health check routes (no middleware applied)
   app.use("/", healthRoutes);
 
@@ -83,24 +101,6 @@ export const createApp = async () => {
   // configurePassport();
 
   // Preflight handler removed to avoid conflicts
-
-  // CORS must be applied BEFORE GraphQL setup
-  app.use(
-    cors({
-      origin:
-        process.env.NODE_ENV === "production"
-          ? ["https://zeelcut-production.up.railway.app/", "https://zeelcut-production-e823.up.railway.app"]
-          : ["http://localhost:3000", "http://localhost:5173"],
-      credentials: true,
-      methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-      allowedHeaders: [
-        "Content-Type",
-        "Authorization",
-        "X-Requested-With",
-        "Apollo-Require-Preflight", // For GraphQL
-      ],
-    })
-  );
 
   app.use(helmet());
   app.use(helmet.frameguard({ action: "deny" }));
