@@ -83,13 +83,18 @@ const Signup = () => {
 
   const onSubmit = async (formData: InputForm) => {
     try {
+      setApiError("");
       await signUp({
         ...formData,
         verificationToken,
       }).unwrap();
       router.push("/");
-    } catch (error) {
-      console.log("error: ", error);
+    } catch (err: any) {
+      const message =
+        err?.data?.message || "Failed to send OTP. Please try again.";
+
+      setApiError(message);
+      showToast(message, "error");
     }
   };
 
