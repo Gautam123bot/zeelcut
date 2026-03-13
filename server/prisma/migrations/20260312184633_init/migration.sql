@@ -4,7 +4,7 @@ CREATE TABLE `User` (
     `googleId` VARCHAR(191) NULL,
     `twitterId` VARCHAR(191) NULL,
     `facebookId` VARCHAR(191) NULL,
-    `email` VARCHAR(191) NULL,
+    `email` VARCHAR(191) NOT NULL,
     `password` VARCHAR(191) NULL,
     `name` VARCHAR(191) NOT NULL,
     `avatar` VARCHAR(191) NULL,
@@ -13,11 +13,9 @@ CREATE TABLE `User` (
     `role` ENUM('ADMIN', 'USER', 'SUPERADMIN') NOT NULL DEFAULT 'USER',
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
-    `phone` VARCHAR(191) NOT NULL,
 
     UNIQUE INDEX `User_email_key`(`email`),
-    UNIQUE INDEX `User_phone_key`(`phone`),
-    INDEX `User_phone_idx`(`phone`),
+    INDEX `User_email_idx`(`email`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 

@@ -8,8 +8,7 @@ export interface User {
   id: string;
   role: Role;
   name?: string;
-  email: string | null;
-  phone?: string;
+  email: string;
   emailVerified?: boolean;
   avatar?: string | null;
 }

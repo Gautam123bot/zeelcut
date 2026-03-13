@@ -4,8 +4,7 @@ import { setUser, logout } from "../slices/AuthSlice";
 interface User {
   id: string;
   name: string;
-  phone: string;
-  email: string | null;
+  email: string;
   role: string;
   emailVerified: boolean;
   avatar: string | null;
@@ -13,30 +12,20 @@ interface User {
 
 export const authApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    // sendOtp: builder.mutation<
-    //   { success: boolean; message: string; verificationToken: string },
-    //   { email: string }
-    // >({
-    //   query: ({ email }) => ({
-    //     url: "/auth/send-otp",
-    //     method: "POST",
-    //     body: { email },
-    //   }),
-    // }),
-    sendPhoneOtp: builder.mutation<
-      { success: boolean; message: string },
-      { phone: string }
+    sendOtp: builder.mutation<
+      { success: boolean; message: string; verificationToken: string },
+      { email: string }
     >({
-      query: ({ phone }) => ({
-        url: "/auth/send-phone-otp",
+      query: ({ email }) => ({
+        url: "/auth/send-otp",
         method: "POST",
-        body: { phone },
+        body: { email },
       }),
     }),
 
     signIn: builder.mutation<
       { accessToken: string; user: User },
-      { phone: string; password: string }
+      { email: string; password: string }
     >({
       query: (credentials) => ({
         url: "/auth/sign-in",
@@ -51,7 +40,7 @@ export const authApi = apiSlice.injectEndpoints({
     }),
     signup: builder.mutation<
       { accessToken: string; user: User },
-      { name: string; phone: string; email?: string; password: string; otp: string; }
+      { name: string; email: string; password: string; otp: string; verificationToken: string; }
     >({
       query: (data) => ({
         url: "/auth/register",
@@ -74,11 +63,11 @@ export const authApi = apiSlice.injectEndpoints({
         dispatch(logout());
       },
     }),
-    forgotPassword: builder.mutation<void, { phone: string }>({
-      query: ({ phone }) => ({
+    forgotPassword: builder.mutation<void, { email: string }>({
+      query: ({ email }) => ({
         url: "/auth/forgot-password",
         method: "POST",
-        body: { phone },
+        body: { email },
       }),
     }),
     resetPassword: builder.mutation<void, { token: string; password: string }>({
@@ -103,8 +92,7 @@ export const authApi = apiSlice.injectEndpoints({
 });
 
 export const {
-  // useSendOtpMutation,
-  useSendPhoneOtpMutation,
+  useSendOtpMutation,
   useSignInMutation,
   useSignupMutation,
   useSignOutMutation,

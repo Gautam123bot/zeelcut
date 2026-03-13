@@ -4,7 +4,7 @@ import { UserPlus, Mail, User, Lock } from "lucide-react";
 
 export interface CreateAdminFormData {
   name: string;
-  phone: string;
+  email: string;
   password: string;
   confirmPassword: string;
 }
@@ -68,17 +68,17 @@ const CreateAdminForm: React.FC<CreateAdminFormProps> = ({
       {/* Email */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          Phone Number
+          Email Address
         </label>
         <div className="relative">
           <Controller
-            name="phone"
+            name="email"
             control={control}
             rules={{
-              required: "Phone number is required",
+              required: "Email is required",
               pattern: {
-                value: /^[0-9]{10,15}$/,
-                message: "Enter a valid phone number",
+                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                message: "Invalid email format",
               },
             }}
             render={({ field }) => (
@@ -92,8 +92,8 @@ const CreateAdminForm: React.FC<CreateAdminFormProps> = ({
           />
           <Mail className="absolute left-3 top-3.5 text-gray-400" size={18} />
         </div>
-        {errors.phone && (
-          <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>
+        {errors.email && (
+          <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
         )}
       </div>
 

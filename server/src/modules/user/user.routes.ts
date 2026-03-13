@@ -145,11 +145,11 @@ router.get(
  *         description: User not found.
  */
 router.get(
-  "/phone/:phone",
+  "/email/:email",
   protect,
   authorizeRole("ADMIN", "SUPERADMIN"),
   validateDto(UserEmailDto),
-  userController.getUserByPhone
+  userController.getUserByEmail
 );
 
 /**

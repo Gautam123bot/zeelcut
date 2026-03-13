@@ -204,7 +204,6 @@ export class ReportsService {
         userId: user.id,
         name: user.name || "Unknown",
         email: user.email || "Unknown",
-        phone: user.phone,
         orderCount: user.orders.length,
         totalSpent: user.orders.reduce((sum, order) => sum + order.amount, 0),
       }))

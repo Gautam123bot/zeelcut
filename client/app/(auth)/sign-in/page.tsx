@@ -13,7 +13,7 @@ import Image from "next/image";
 import { AUTH_API_BASE_URL } from "@/app/lib/constants/config";
 
 interface InputForm {
-  phone: string;
+  email: string;
   password: string;
 }
 
@@ -27,14 +27,14 @@ const SignIn = () => {
     formState: { errors },
   } = useForm<InputForm>({
     defaultValues: {
-      phone: "",
+      email: "",
       password: "",
     },
   });
 
   const onSubmit = async (formData: InputForm) => {
     try {
-      await signIn({...formData, phone: `+91${formData.phone}`}).unwrap();
+      await signIn(formData).unwrap();
       router.push("/");
     } catch (error) {
       console.log("error: ", error);
@@ -62,18 +62,12 @@ const SignIn = () => {
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <Input
-              name="phone"
+              name="email"
               type="text"
-              placeholder="Phone Number"
+              placeholder="Email"
               control={control}
-              validation={{
-                required: "Phone number is required",
-                pattern: {
-                  value: /^[0-9]{10}$/,
-                  message: "Enter a valid 10 digit phone number",
-                },
-              }}
-              error={errors.phone?.message}
+              validation={{ required: "Email is required" }}
+              error={errors.email?.message}
               className="py-2.5 text-sm"
             />
 

@@ -13,7 +13,6 @@ export class UserRepository {
       select: {
         id: true,
         name: true,
-        phone: true,
         email: true,
         avatar: true,
         role: true,
@@ -21,16 +20,15 @@ export class UserRepository {
     });
   }
 
-  async findUserByPhone(phone: string) {
-    return await prisma.user.findUnique({ where: { phone } });
+  async findUserByEmail(email: string) {
+    return await prisma.user.findUnique({ where: { email } });
   }
 
   async updateUser(
     id: string,
     data: Partial<{
       name?: string;
-      email?: string;
-      phone?: string;
+      email: string;
       password?: string;
       avatar?: string;
       role?: ROLE;
@@ -54,8 +52,7 @@ export class UserRepository {
 
   async createUser(data: {
     name: string;
-    phone: string;
-    email?: string;
+    email: string;
     password: string;
     role: string;
   }) {

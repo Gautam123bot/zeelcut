@@ -7,7 +7,7 @@ import { Loader2 } from "lucide-react";
 import PasswordField from "@/app/components/molecules/PasswordField";
 import { z } from "zod";
 import MainLayout from "@/app/components/templates/MainLayout";
-import { useSignupMutation, useSendPhoneOtpMutation } from "@/app/store/apis/AuthApi";
+import { useSignupMutation, useSendOtpMutation } from "@/app/store/apis/AuthApi";
 import { useState } from "react";
 import GoogleIcon from "@/app/assets/icons/google.png";
 import FacebookIcon from "@/app/assets/icons/facebook.png";
@@ -17,8 +17,7 @@ import useToast from "@/app/hooks/ui/useToast";
 
 interface InputForm {
   name: string;
-  phone: string;
-  email?: string;
+  email: string;
   password: string;
   otp: string;
 }
@@ -38,48 +37,35 @@ const emailSchema = (value: string) => {
 };
 
 const Signup = () => {
-  const [sendPhoneOtp] = useSendPhoneOtpMutation();
+  const [sendOtp] = useSendOtpMutation();
   const [signUp, { isLoading }] = useSignupMutation();
-  // const [sendOtp] = useSendOtpMutation();
   const [otpSent, setOtpSent] = useState(false);
+  const [otpLoading, setOtpLoading] = useState(false);
   const router = useRouter();
   const [apiError, setApiError] = useState("");
   const { showToast } = useToast();
+  const [verificationToken, setVerificationToken] = useState("");
 
-  // const handleSendOtp = async () => {
-  //   const email = watch("email");
-  //   if (!email) return alert("Enter email first");
-
-  //   try {
-  //     const res = await sendOtp({ email }).unwrap();
-  //     console.log(res)
-  //     if (res.success) {
-  //       showToast(res.message, "success");
-  //       setVerificationToken(res.verificationToken);
-  //       setOtpSent(true);
-  //     }
-  //   } catch (err) {
-  //     console.log(err);
-  //     showToast("Something went wrong", "error");
-  //   }
-  // };
   const handleSendOtp = async () => {
-    const phone = `+91${watch("phone")}`;
-
-    if (!phone) {
-      showToast("Enter phone number first", "error");
-      return;
-    }
+    const email = watch("email");
+    if (!email) return alert("Enter email first");
 
     try {
-      const res = await sendPhoneOtp({ phone }).unwrap();
-
-      showToast(res.message || "OTP sent successfully", "success");
-      setOtpSent(true);
-  } catch (err: any) {
-    showToast(err?.data?.message || "Failed to send OTP", "error");
-  }
-};
+      setOtpLoading(true);
+      const res = await sendOtp({ email }).unwrap();
+      console.log(res)
+      if (res.success) {
+        showToast(res.message, "success");
+        setVerificationToken(res.verificationToken);
+        setOtpSent(true);
+      }
+    } catch (err) {
+      console.log(err);
+      showToast("Something went wrong", "error");
+    } finally {
+      setOtpLoading(false);
+    }
+  };
 
   const {
     register,
@@ -97,11 +83,13 @@ const Signup = () => {
 
   const onSubmit = async (formData: InputForm) => {
     try {
-      await signUp({...formData, phone: `+91${formData.phone}`}).unwrap();
+      await signUp({
+        ...formData,
+        verificationToken,
+      }).unwrap();
       router.push("/");
-    } catch (err: any) {
-      console.log(err)
-      setApiError(err?.data?.message || "Signup failed");
+    } catch (error) {
+      console.log("error: ", error);
     }
   };
 
@@ -137,54 +125,33 @@ const Signup = () => {
               className="py-2.5 text-sm"
             />
 
-            <div className="relative">
-              <Input
-                name="phone"
-                type="text"
-                placeholder="Phone Number"
-                control={control}
-                validation={{
-                  required: "Phone number is required",
-                  pattern: {
-                    value: /^[0-9]{10,15}$/,
-                    message: "Enter a valid phone number",
-                  },
-                }}
-                error={errors.phone?.message}
-                className="py-2.5 text-sm pr-28"
-              />
-
-              <button
-                type="button"
-                onClick={handleSendOtp}
-                className="absolute right-1 top-1/2 -translate-y-1/2 px-3 py-1.5 text-xs bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
-              >
-                Send OTP
-              </button>
-            </div>
-
             {/* Email Field + Send OTP */}
             <div className="relative">
               <Input
                 name="email"
                 type="text"
-                placeholder="Email (Optional)"
+                placeholder="Email"
                 control={control}
                 validation={{
-                  // required: "Email is required",
+                  required: "Email is required",
                   validate: emailSchema,
                 }}
                 error={errors.email?.message}
                 className="py-2.5 text-sm pr-28"
               />
 
-              {/* <button
+              <button
                 type="button"
                 onClick={handleSendOtp}
+                disabled={otpLoading}
                 className="absolute right-1 top-1/2 -translate-y-1/2 px-3 py-1.5 text-xs bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
               >
-                Send OTP
-              </button> */}
+                {otpLoading ? (
+                  <Loader2 className="animate-spin" size={14} />
+                ) : (
+                  "Send OTP"
+                )}
+              </button>
             </div>
 
             {/* OTP Field */}
@@ -195,7 +162,7 @@ const Signup = () => {
                 placeholder="Enter OTP"
                 control={control}
                 validation={{
-                  required: "OTP is required",
+                  required: otpSent ? "OTP is required" : false,
                 }}
                 error={errors.otp?.message}
                 className="py-2.5 text-sm"
@@ -206,8 +173,11 @@ const Signup = () => {
 
             <button
               type="submit"
+              disabled={!otpSent || isLoading}
               className={`w-full py-2.5 bg-indigo-600 text-white rounded-md font-medium hover:bg-indigo-700 transition-colors ${
-                isLoading ? "cursor-not-allowed bg-gray-400" : ""
+                !otpSent || isLoading
+                  ? "cursor-not-allowed bg-gray-400"
+                  : "bg-indigo-600 hover:bg-indigo-700"
               }`}
             >
               {isLoading ? (

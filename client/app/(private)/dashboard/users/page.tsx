@@ -59,7 +59,7 @@ const UsersDashboard = () => {
     defaultValues: {
       id: "",
       name: "",
-      phone: "",
+      email: "",
       role: "USER",
       emailVerified: false,
     },
@@ -68,7 +68,7 @@ const UsersDashboard = () => {
   const createAdminForm = useForm<CreateAdminFormData>({
     defaultValues: {
       name: "",
-      phone: "",
+      email: "",
       password: "",
       confirmPassword: "",
     },
@@ -242,8 +242,8 @@ const UsersDashboard = () => {
 
   const handleCreateAdminSubmit = async (data: CreateAdminFormData) => {
     try {
-      const { name, phone, password } = data;
-      await createAdmin({ name, phone, password }).unwrap();
+      const { name, email, password } = data;
+      await createAdmin({ name, email, password }).unwrap();
       setIsCreateAdminModalOpen(false);
       createAdminForm.reset();
       showToast("Admin created successfully", "success");

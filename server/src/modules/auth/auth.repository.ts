@@ -2,22 +2,21 @@ import prisma from "@/infra/database/database.config";
 import { ROLE } from "@prisma/client";
 
 export class AuthRepository {
-  async findUserByPhone(phone: string) {
+  async findUserByEmail(email: string) {
     return prisma.user.findUnique({
-      where: { phone },
+      where: { email },
     });
   }
 
-  async findUserByPhoneWithPassword(phone: string) {
+  async findUserByEmailWithPassword(email: string) {
     return prisma.user.findUnique({
-      where: { phone },
+      where: { email },
       select: {
         id: true,
         password: true,
         role: true,
         name: true,
         email: true,
-        phone: true,
         avatar: true,
       },
     });
@@ -30,7 +29,6 @@ export class AuthRepository {
         id: true,
         name: true,
         email: true,
-        phone: true,
         role: true,
         avatar: true,
       },
@@ -38,8 +36,7 @@ export class AuthRepository {
   }
 
   async createUser(data: {
-    phone: string;
-    email?: string;
+    email: string;
     name: string;
     password: string;
     role: ROLE;
@@ -50,7 +47,6 @@ export class AuthRepository {
         id: true,
         name: true,
         email: true,
-        phone: true,
         role: true,
         avatar: true,
       },
@@ -60,9 +56,9 @@ export class AuthRepository {
   async updateUserEmailVerification(
     userId: string,
     data: {
-      phoneVerificationToken: string | null;
-      phoneVerificationTokenExpiresAt: Date | null;
-      phoneVerified?: boolean;
+      emailVerificationToken: string | null;
+      emailVerificationTokenExpiresAt: Date | null;
+      emailVerified?: boolean;
     }
   ) {
     return prisma.user.update({
@@ -72,7 +68,7 @@ export class AuthRepository {
   }
 
   async updateUserPasswordReset(
-    phone: string,
+    email: string,
     data: {
       resetPasswordToken?: string | null;
       resetPasswordTokenExpiresAt?: Date | null;
@@ -80,7 +76,7 @@ export class AuthRepository {
     }
   ) {
     return prisma.user.update({
-      where: { phone },
+      where: { email },
       data,
     });
   }

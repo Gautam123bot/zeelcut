@@ -175,8 +175,7 @@ const env = process.env.NODE_ENV;
  *       201:
  *         description: User successfully created.
  */
-// router.post("/send-otp", authController.sendOtp);
-router.post("/send-phone-otp", authController.sendPhoneOtp);
+router.post("/send-otp", authController.sendOtp);
 router.post("/register", authController.signup);
 
 /**

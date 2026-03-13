@@ -30,10 +30,10 @@ export class UserController {
     }
   );
 
-  getUserByPhone = asyncHandler(
+  getUserByEmail = asyncHandler(
     async (req: Request, res: Response): Promise<void> => {
-      const { phone } = req.params;
-      const user = await this.userService.getUserByPhone(phone);
+      const { email } = req.params;
+      const user = await this.userService.getUserByEmail(email);
       sendResponse(res, 200, {
         data: { user },
         message: "User fetched successfully",
@@ -96,7 +96,7 @@ export class UserController {
 
   createAdmin = asyncHandler(
     async (req: Request, res: Response): Promise<void> => {
-      const { name, phone, email, password } = req.body;
+      const { name, email, password } = req.body;
       const currentUserId = req.user?.id;
 
       if (!currentUserId) {
@@ -104,7 +104,7 @@ export class UserController {
       }
 
       const newAdmin = await this.userService.createAdmin(
-        { name, phone, email, password },
+        { name, email, password },
         currentUserId
       );
 

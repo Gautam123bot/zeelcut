@@ -8,7 +8,7 @@ export interface ProductPerformance {
 export interface TopUser {
   id: string;
   name: string;
-  phone: string;
+  email: string;
   orderCount: number;
   totalSpent: number;
   engagementScore: number;

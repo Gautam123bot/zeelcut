@@ -12,7 +12,7 @@ model User {
   googleId                    String?
   twitterId                   String?
   facebookId                  String?
-  email                       String?       @unique
+  email                       String        @unique
   password                    String?
   name                        String
   avatar                      String?
@@ -21,7 +21,6 @@ model User {
   role                        ROLE          @default(USER)
   createdAt                   DateTime      @default(now())
   updatedAt                   DateTime      @updatedAt
-  phone                       String        @unique
   addresses                   Address[]
   carts                       Cart[]
   cartEvents                  CartEvent[]
@@ -34,7 +33,7 @@ model User {
   Restock                     Restock[]
   reviews                     Review[]
 
-  @@index([phone])
+  @@index([email])
 }
 
 model Product {

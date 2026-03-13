@@ -18,41 +18,26 @@ export class AuthController {
     private cartService?: CartService
   ) {}
 
-  sendPhoneOtp = asyncHandler(async (req: Request, res: Response) => {
-
-    const { phone } = req.body;
-
-    if (!phone) {
-      throw new AppError(400, "Phone number required");
+  sendOtp = asyncHandler(async (req: Request, res: Response) => {
+    const { email } = req.body;
+    if (!email) {
+      throw new AppError(400, "Email is required");
     }
-
-    await this.authService.sendPhoneOtp(phone);
+    const verificationToken = await this.authService.sendOtp(email)  
 
     sendResponse(res, 200, {
       message: "OTP sent successfully",
+      data: {
+        verificationToken,
+      },
     });
   });
 
-  // sendOtp = asyncHandler(async (req: Request, res: Response) => {
-  //   const { email } = req.body;
-  //   if (!email) {
-  //     throw new AppError(400, "Email is required");
-  //   }
-  //   const verificationToken = await this.authService.sendOtp(email)  
-
-  //   sendResponse(res, 200, {
-  //     message: "OTP sent successfully",
-  //     data: {
-  //       verificationToken,
-  //     },
-  //   });
-  // });
-
   signup = asyncHandler(async (req: Request, res: Response): Promise<void> => {
     const start = Date.now();
-    const { name, email, phone, password, role, otp } = req.body;
+    const { name, email, password, verificationToken, role, otp } = req.body;
 
-    const { user, accessToken, refreshToken } = await this.authService.registerUser({name, email, phone, password, role, otp });
+    const { user, accessToken, refreshToken } = await this.authService.registerUser({name, email, password, role, verificationToken, otp });
       
     res.cookie("refreshToken", refreshToken, cookieOptions);
     res.cookie("accessToken", accessToken, cookieOptions);
@@ -82,9 +67,9 @@ export class AuthController {
   });
 
   signin = asyncHandler(async (req: Request, res: Response): Promise<void> => {
-    const { phone, password } = req.body;
+    const { email, password } = req.body;
     const { user, accessToken, refreshToken } = await this.authService.signin({
-      phone,
+      email,
       password,
     });
 
@@ -154,8 +139,8 @@ export class AuthController {
 
   forgotPassword = asyncHandler(
     async (req: Request, res: Response): Promise<void> => {
-      const { phone } = req.body;
-      const response = await this.authService.forgotPassword(phone);
+      const { email } = req.body;
+      const response = await this.authService.forgotPassword(email);
       const userId = req.user?.id;
 
       sendResponse(res, 200, { message: response.message });

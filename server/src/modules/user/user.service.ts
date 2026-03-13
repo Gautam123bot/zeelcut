@@ -16,8 +16,8 @@ export class UserService {
     return user;
   }
 
-  async getUserByPhone(phone: string) {
-    const user = await this.userRepository.findUserByPhone(phone);
+  async getUserByEmail(email: string) {
+    const user = await this.userRepository.findUserByEmail(email);
     if (!user) {
       throw new AppError(404, "User not found");
     }
@@ -36,8 +36,7 @@ export class UserService {
     id: string,
     data: Partial<{
       name?: string;
-      phone?: string;
-      email?: string;
+      email: string;
       avatar?: string;
     }>
   ) {
@@ -75,8 +74,7 @@ export class UserService {
   async createAdmin(
     adminData: {
       name: string;
-      phone: string;
-      email?: string;
+      email: string;
       password: string;
     },
     createdByUserId: string
@@ -92,11 +90,11 @@ export class UserService {
     }
 
     // Check if user already exists
-    const existingUser = await this.userRepository.findUserByPhone(
-      adminData.phone
+    const existingUser = await this.userRepository.findUserByEmail(
+      adminData.email
     );
     if (existingUser) {
-      throw new AppError(400, "User with this phone number already exists");
+      throw new AppError(400, "User with this email id already exists");
     }
 
     // Create new admin with ADMIN role (not SUPERADMIN)

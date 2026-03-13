@@ -291,5 +291,7 @@ export default async function generateXLSX(data: any): Promise<Buffer> {
     });
   });
 
-  return workbook.xlsx.writeBuffer() as Promise<Buffer>;
+  // return workbook.xlsx.writeBuffer() as Promise<Buffer>;
+  const buffer = await workbook.xlsx.writeBuffer();
+  return Buffer.from(buffer);
 }

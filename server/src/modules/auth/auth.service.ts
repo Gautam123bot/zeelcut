@@ -13,106 +13,76 @@ import NotFoundError from "@/shared/errors/NotFoundError";
 import { hashPassword } from "@/shared/utils/auth/passwordUtils";
 import { generateOTP } from "@/shared/utils/auth/generateOtpUtils";
 import emailVerificationTemplate from "@/shared/templates/emailVerification";
-import twilioClient from "@/shared/utils/sms.service";
+// import twilioClient from "@/shared/utils/sms.service";
 
 export class AuthService {
   constructor(private authRepository: AuthRepository) {}
-
-  async sendPhoneOtp(phone: string) {
-    try {
-      const verification = await twilioClient.verify
-        .v2.services(process.env.TWILIO_VERIFY_SERVICE_SID!)
-        .verifications.create({
-          to: phone,
-          channel: "sms",
-        });
-
-      return verification.sid;
-
-    } catch (error) {
-      console.log("TWILIO ERROR:", error);  
-      throw new AppError(500, "Failed to send OTP");
-    }
-  }
   
-  // async sendOtp(email: string) {
-  //   const otp = generateOTP();
+  async sendOtp(email: string) {
+    const otp = generateOTP();
 
-  //   const verificationToken = jwt.sign(
-  //     { email, otp, purpose: "EMAIL_VERIFICATION" },
-  //     process.env.JWT_SECRET as string,
-  //     { expiresIn: "5m" }
-  //   );
-  //   try {
-  //   await sendEmail({
-  //     to: email,
-  //     subject: "Zeelcut Email Verification",
-  //     text: `Your OTP is ${otp}`,
-  //     html: emailVerificationTemplate(otp),
-  //   });
-  //   } catch (error) {
-  //     logger.error("OTP email failed", error);
+    const verificationToken = jwt.sign(
+      { email, otp, purpose: "EMAIL_VERIFICATION" },
+      process.env.JWT_SECRET as string,
+      { expiresIn: "5m" }
+    );
+    try {
+    await sendEmail({
+      to: email,
+      subject: "Zeelcut Email Verification",
+      text: `Your OTP is ${otp}`,
+      html: emailVerificationTemplate(otp),
+    });
+    } catch (error) {
+      logger.error("OTP email failed", error);
 
-  //     throw new AppError(
-  //       500,
-  //       "Failed to send OTP email. Please try again."
-  //     );
-  //   }
-  //   return verificationToken;
-  // }
+      throw new AppError(
+        500,
+        "Failed to send OTP email. Please try again."
+      );
+    }
+    return verificationToken;
+  }
 
   async registerUser({
     name,
     email,
-    phone,
     password,
-    role, otp 
+    role,verificationToken, otp 
   }: RegisterUserParams): Promise<AuthResponse> {
-    const existingUser = await this.authRepository.findUserByPhone(phone);
+    const existingUser = await this.authRepository.findUserByEmail(email);
 
     if (existingUser) {
       throw new AppError(
         400,
-        "This phone number is already registered, please log in instead."
+        "This email id is already registered, please log in instead."
       );
     }
-    // let decoded: any;
+    let decoded: any;
     
-    // try {
-    //   decoded = jwt.verify(
-    //     verificationToken,
-    //     process.env.JWT_SECRET as string
-    //   );
-    // } catch (error) {
-    //   throw new AppError(400, "Email not verified");
-    // }
+    try {
+      decoded = jwt.verify(
+        verificationToken,
+        process.env.JWT_SECRET as string
+      );
+    } catch (error) {
+      throw new AppError(400, "Email not verified");
+    }
 
-    // if (decoded.purpose !== "EMAIL_VERIFICATION") {
-    //   throw new AppError(400, "Invalid verification token");
-    // }
-    // if (decoded.email !== email) {
-    //   throw new AppError(400, "Email verification failed");
-    // }
-    // if (String(decoded.otp) !== String(otp)) {
-    //   throw new AppError(400, "Invalid OTP");
-    // }
-
-    const verificationCheck = await twilioClient.verify
-      .v2.services(process.env.TWILIO_VERIFY_SERVICE_SID!)
-      .verificationChecks.create({
-        to: phone,
-        code: otp,
-      });
-
-    if (verificationCheck.status !== "approved") {
-      throw new AppError(400, "Invalid or expired OTP");
+    if (decoded.purpose !== "EMAIL_VERIFICATION") {
+      throw new AppError(400, "Invalid verification token");
+    }
+    if (decoded.email !== email) {
+      throw new AppError(400, "Email verification failed");
+    }
+    if (String(decoded.otp) !== String(otp)) {
+      throw new AppError(400, "Invalid OTP");
     }
     
     const hashedPassword = await hashPassword(password);
     // Force new registrations to be USER role only for security
     const newUser = await this.authRepository.createUser({
       email,
-      phone,
       name,
       password: hashedPassword,
       role: ROLE.USER, // Ignore any role passed from client for security
@@ -126,7 +96,6 @@ export class AuthService {
         id: newUser.id,
         name: newUser.name,
         email: newUser.email,
-        phone: newUser.phone,
         role: newUser.role,
         avatar: null,
       },
@@ -135,26 +104,25 @@ export class AuthService {
     };
   }
 
-  async signin({ phone, password }: SignInParams): Promise<{
+  async signin({ email, password }: SignInParams): Promise<{
     user: {
       id: string;
       role: ROLE;
       name: string;
-      email: string | null;
-      phone: string;
+      email: string;
       avatar: string | null;
     };
     accessToken: string;
     refreshToken: string;
   }> {
-    const user = await this.authRepository.findUserByPhoneWithPassword(phone);
+    const user = await this.authRepository.findUserByEmailWithPassword(email);
 
     if (!user) {
       throw new BadRequestError("User not exist");
     }
 
     if (!user.password) {
-      throw new AppError(400, "Phone number or password is incorrect.");
+      throw new AppError(400, "Email Id or password is incorrect.");
     }
     const isPasswordValid = await passwordUtils.comparePassword(
       password,
@@ -174,11 +142,11 @@ export class AuthService {
     return { message: "User logged out successfully" };
   }
 
-  async forgotPassword(phone: string): Promise<{ message: string }> {
-    const user = await this.authRepository.findUserByPhone(phone);
+  async forgotPassword(email: string): Promise<{ message: string }> {
+    const user = await this.authRepository.findUserByEmail(email);
 
     if (!user) {
-      throw new NotFoundError("Phone");
+      throw new NotFoundError("Email");
     }
 
     const resetToken = crypto.randomBytes(32).toString("hex");
@@ -187,7 +155,7 @@ export class AuthService {
       .update(resetToken)
       .digest("hex");
 
-    await this.authRepository.updateUserPasswordReset(phone, {
+    await this.authRepository.updateUserPasswordReset(email, {
       resetPasswordToken: hashedToken,
       resetPasswordTokenExpiresAt: new Date(Date.now() + 10 * 60 * 1000),
     });
@@ -202,7 +170,7 @@ export class AuthService {
     //   text: "Reset your password",
     // });
 
-    return { message: "Password reset phone sent successfully" };
+    return { message: "Password reset email sent successfully" };
   }
 
   async resetPassword(
@@ -226,8 +194,7 @@ export class AuthService {
     user: {
       id: string;
       name: string;
-      email: string | null;
-      phone: string;
+      email: string;
       role: string;
       avatar: string | null;
     };

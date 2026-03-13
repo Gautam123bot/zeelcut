@@ -2,15 +2,15 @@ import { ROLE } from "@prisma/client";
 
 export interface RegisterUserParams {
   name: string;
-  email?: string;
-  phone: string;
+  email: string;
   password: string;
   role?: ROLE;
   otp: string;
+  verificationToken: string;
 }
 
 export interface SignInParams {
-  phone: string;
+  email: string;
   password: string;
 }
 
@@ -18,8 +18,7 @@ export interface AuthResponse {
   user: {
     id: string;
     name: string;
-    email: string | null;
-    phone: string;
+    email: string;
     role: ROLE;
     avatar: string | null;
   };

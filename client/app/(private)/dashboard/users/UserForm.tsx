@@ -7,7 +7,7 @@ import { useAuth } from "@/app/hooks/useAuth";
 export interface UserFormData {
   id: string | number;
   name: string;
-  phone: string;
+  email: string;
   role: "USER" | "ADMIN" | "SUPERADMIN";
   emailVerified: boolean;
 }
@@ -116,13 +116,13 @@ const UserForm: React.FC<UserFormProps> = ({
           Email
         </label>
         <Controller
-          name="phone"
+          name="email"
           control={control}
           rules={{
-            required: "Phone number is required",
+            required: "Email is required",
             pattern: {
-              value: /^[0-9]{10,15}$/,
-              message: "Enter a valid phone number",
+              value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+              message: "Invalid email format",
             },
           }}
           render={({ field }) => (
@@ -134,8 +134,8 @@ const UserForm: React.FC<UserFormProps> = ({
             />
           )}
         />
-        {errors.phone && (
-          <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>
+        {errors.email && (
+          <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
         )}
       </div>
 

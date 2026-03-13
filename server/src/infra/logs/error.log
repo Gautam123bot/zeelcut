@@ -603,3 +603,39 @@ Foreign key constraint violated on the fields: (`orderId`)
 [2026-03-10T18:52:23.212Z] [31MERROR[39M: Refresh token not found
 [2026-03-10T18:56:16.741Z] [31MERROR[39M: Unauthorized, please log in
 [2026-03-10T18:56:16.948Z] [31MERROR[39M: Refresh token not found
+[2026-03-12T10:36:28.505Z] [31MERROR[39M: Invalid access token, please log in
+[2026-03-12T10:36:29.122Z] [31MERROR[39M: Your session has expired, please login again.
+[2026-03-12T12:04:28.343Z] [31MERROR[39M: Invalid access token, please log in
+[2026-03-12T12:04:29.306Z] [31MERROR[39M: Your session has expired, please login again.
+[2026-03-12T12:05:30.274Z] [31MERROR[39M: Failed to send OTP
+[2026-03-12T12:27:13.694Z] [31MERROR[39M: User not exist
+[2026-03-12T12:27:25.119Z] [31MERROR[39M: User not exist
+[2026-03-12T12:27:31.220Z] [31MERROR[39M: User not exist
+[2026-03-12T12:29:22.197Z] [31MERROR[39M: Failed to send OTP
+[2026-03-12T12:29:50.357Z] [31MERROR[39M: Failed to send OTP
+[2026-03-12T12:31:07.298Z] [31MERROR[39M: Failed to send OTP
+[2026-03-12T12:36:17.798Z] [31MERROR[39M: User not exist
+[2026-03-12T12:37:04.178Z] [31MERROR[39M: User not exist
+[2026-03-12T12:43:00.111Z] [31MERROR[39M: Your password is incorrect.
+[2026-03-12T13:21:16.501Z] [31MERROR[39M: User not exist
+[2026-03-12T13:31:14.936Z] [31MERROR[39M: Invalid access token, please log in
+[2026-03-12T13:31:15.262Z] [31MERROR[39M: Your session has expired, please login again.
+[2026-03-12T13:35:11.348Z] [31MERROR[39M: Invalid access token, please log in
+[2026-03-12T13:35:11.537Z] [31MERROR[39M: Your session has expired, please login again.
+[2026-03-13T11:18:27.759Z] [31MERROR[39M: Invalid access token, please log in
+[2026-03-13T11:18:28.089Z] [31MERROR[39M: Your session has expired, please login again.
+[2026-03-13T11:22:47.514Z] [31MERROR[39M: Email not verified
+[2026-03-13T11:38:50.769Z] [31MERROR[39M: Invalid access token, please log in
+[2026-03-13T11:38:51.106Z] [31MERROR[39M: Your session has expired, please login again.
+[2026-03-13T11:40:00.074Z] [31MERROR[39M: Invalid access token, please log in
+[2026-03-13T11:40:00.281Z] [31MERROR[39M: Your session has expired, please login again.
+[2026-03-13T11:42:08.201Z] [31MERROR[39M: Email not verified
+[2026-03-13T11:42:19.620Z] [31MERROR[39M: Email not verified
+[2026-03-13T14:34:52.549Z] [31MERROR[39M: Invalid access token, please log in
+[2026-03-13T14:34:54.587Z] [31MERROR[39M: Your session has expired, please login again.
+[2026-03-13T14:36:57.867Z] [31MERROR[39M: Invalid OTP
+[2026-03-13T14:37:14.616Z] [31MERROR[39M: Invalid OTP
+[2026-03-13T14:39:29.145Z] [31MERROR[39M: Invalid OTP
+[2026-03-13T14:40:01.474Z] [31MERROR[39M: Invalid OTP
+[2026-03-13T14:40:33.374Z] [31MERROR[39M: Invalid OTP
+[2026-03-13T14:41:24.250Z] [31MERROR[39M: Invalid OTP
