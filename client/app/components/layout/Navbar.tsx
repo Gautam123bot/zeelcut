@@ -54,6 +54,16 @@ const Navbar = () => {
 
   return (
     <>
+       <div className="w-full bg-indigo-600 text-white overflow-hidden">
+        <div className="flex whitespace-nowrap animate-marquee">
+          <span className="mx-6 py-1 text-sm font-medium">
+            🚀 Zeelcut website will be live on 12 April — Stay tuned for amazing offers!
+          </span>
+          <span className="mx-6 py-1 text-sm font-medium">
+            🚀 Zeelcut website will be live on 12 April — Stay tuned for amazing offers!
+          </span>
+        </div>
+      </div>
       <header
         className={`sticky top-0 w-full z-50 transition-all duration-300 ${
           scrolled
