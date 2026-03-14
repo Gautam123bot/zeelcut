@@ -16,7 +16,6 @@ export default function AuthProvider({
       try {
         const response = await triggerGetMe().unwrap();
         // The backend returns { success, message, user }
-        debugger
         const user = response.user;
         if (user) {
           dispatch(setUser({ user }));

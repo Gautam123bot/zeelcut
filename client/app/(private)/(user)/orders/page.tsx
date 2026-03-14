@@ -65,10 +65,7 @@ const OrderCard = ({ order }: { order: any }) => {
   };
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-    }).format(amount);
+    return `Rs. ${amount.toLocaleString("en-IN")}`;
   };
 
   const getItemCount = (orderItems: any[]) => {
@@ -122,10 +119,10 @@ const OrderCard = ({ order }: { order: any }) => {
       <div className="p-3 sm:p-4 lg:p-6">
         <div className="grid grid-cols-2 gap-2 sm:gap-4 mb-3 sm:mb-4">
           <div className="flex items-center space-x-1 sm:space-x-2">
-            <DollarSign
+            {/* <DollarSign
               size={14}
               className="sm:w-4 sm:h-4 text-green-500 flex-shrink-0"
-            />
+            /> */}
             <div className="min-w-0">
               <p className="text-xs text-gray-500">Total Amount</p>
               <p className="text-sm sm:text-lg font-semibold text-gray-900 truncate">

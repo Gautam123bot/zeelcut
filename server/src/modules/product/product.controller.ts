@@ -55,103 +55,6 @@ export class ProductController {
     }
   );
 
-  // createProduct = asyncHandler(
-  //   async (req: Request, res: Response): Promise<void> => {
-  //     const {
-  //       name,
-  //       description,
-  //       isNew,
-  //       isTrending,
-  //       isBestSeller,
-  //       isFeatured,
-  //       categoryId,
-  //       variants: rawVariants,
-  //     } = req.body;
-
-  //     // Log for debugging
-  //     console.log(
-  //       "req.body:",
-  //       JSON.stringify(req.body, null, 2),
-  //       "req.files:",
-  //       req.files
-  //     );
-
-  //     // Validate variants
-  //     const variants = rawVariants || [];
-  //     if (!Array.isArray(variants) || variants.length === 0) {
-  //       throw new AppError(400, "At least one variant is required");
-  //     }
-
-  //     // Upload images to Cloudinary
-  //     const files = (req.files as Express.Multer.File[]) || [];
-  //     let imageResults: { url: string; public_id: string }[] = [];
-  //     if (files.length > 0) {
-  //       try {
-  //         imageResults = await uploadToCloudinary(files);
-  //         if (imageResults.length === 0) {
-  //           throw new AppError(400, "Failed to upload images to Cloudinary");
-  //         }
-  //       } catch (error) {
-  //         console.error("Cloudinary upload error:", error);
-  //         throw new AppError(400, "Failed to upload images to Cloudinary");
-  //       }
-  //     }
-
-  //     // Process variants
-  //     const processedVariants = variants.map((variant: any, index: number) => {
-  //       // Parse JSON fields
-  //       let attributes = [];
-  //       let imageIndexes = [];
-  //       try {
-  //         attributes = JSON.parse(variant.attributes || "[]");
-  //         imageIndexes = JSON.parse(variant.imageIndexes || "[]");
-  //       } catch (error) {
-  //         console.error(`Error parsing JSON for variant ${index}:`, error);
-  //         throw new AppError(400, `Invalid JSON format in variant ${index}`);
-  //       }
-
-  //       // Map image URLs based on imageIndexes
-  //       const imageUrls = imageIndexes
-  //         .map((idx: number) => {
-  //           if (idx >= 0 && idx < imageResults.length) {
-  //             return imageResults[idx].url;
-  //           }
-  //           console.warn(`Invalid image index ${idx} for variant ${index}`);
-  //           return null;
-  //         })
-  //         .filter((url: string | null) => url !== null);
-
-  //       return {
-  //         ...variant,
-  //         price: parseFloat(variant.price),
-  //         stock: parseInt(variant.stock, 10),
-  //         lowStockThreshold: parseInt(variant.lowStockThreshold || "10", 10),
-  //         attributes,
-  //         images: imageUrls,
-  //       };
-  //     });
-
-  //     // Create product
-  //     const product = await this.productService.createProduct({
-  //       name,
-  //       description,
-  //       isNew: isNew === "true",
-  //       isTrending: isTrending === "true",
-  //       isBestSeller: isBestSeller === "true",
-  //       isFeatured: isFeatured === "true",
-  //       categoryId,
-  //       variants: processedVariants,
-  //     });
-
-  //     // Send response
-  //     res.status(201).json({
-  //       status: "success",
-  //       data: { product },
-  //       message: "Product created successfully",
-  //     });
-  //   }
-  // );
-
   createProduct = asyncHandler(
     async (req: Request, res: Response): Promise<void> => {
       const {
@@ -162,48 +65,85 @@ export class ProductController {
         isBestSeller,
         isFeatured,
         categoryId,
-        variants,
+        variants: rawVariants,
       } = req.body;
 
-      console.log("req.body:", JSON.stringify(req.body, null, 2));
+      // Log for debugging
+      console.log(
+        "req.body:",
+        JSON.stringify(req.body, null, 2),
+        "req.files:",
+        req.files
+      );
 
+      // Validate variants
+      const variants = rawVariants || [];
       if (!Array.isArray(variants) || variants.length === 0) {
         throw new AppError(400, "At least one variant is required");
       }
 
-      // No JSON.parse
-      // No imageIndexes
-      // No Cloudinary upload
-      // Images must already be URLs
-
-      const processedVariants = variants.map((variant: any, index: number) => {
-        if (!Array.isArray(variant.attributes)) {
-          throw new AppError(
-            400,
-            `Attributes must be array in variant ${index}`
-          );
+      // Upload images to Cloudinary
+      const files = (req.files as Express.Multer.File[]) || [];
+      let imageResults: { url: string; public_id: string }[] = [];
+      if (files.length > 0) {
+        try {
+          imageResults = await uploadToCloudinary(files);
+          if (imageResults.length === 0) {
+            throw new AppError(400, "Failed to upload images to Cloudinary");
+          }
+        } catch (error) {
+          console.error("Cloudinary upload error:", error);
+          throw new AppError(400, "Failed to upload images to Cloudinary");
         }
+      }
+
+      // Process variants
+      const processedVariants = variants.map((variant: any, index: number) => {
+        // Parse JSON fields
+        let attributes = [];
+        let imageIndexes = [];
+        try {
+          attributes = JSON.parse(variant.attributes || "[]");
+          imageIndexes = JSON.parse(variant.imageIndexes || "[]");
+        } catch (error) {
+          console.error(`Error parsing JSON for variant ${index}:`, error);
+          throw new AppError(400, `Invalid JSON format in variant ${index}`);
+        }
+
+        // Map image URLs based on imageIndexes
+        const imageUrls = imageIndexes
+          .map((idx: number) => {
+            if (idx >= 0 && idx < imageResults.length) {
+              return imageResults[idx].url;
+            }
+            console.warn(`Invalid image index ${idx} for variant ${index}`);
+            return null;
+          })
+          .filter((url: string | null) => url !== null);
 
         return {
           ...variant,
-          price: Number(variant.price),
-          stock: Number(variant.stock),
-          lowStockThreshold: Number(variant.lowStockThreshold ?? 10),
-          images: variant.images || [],
+          price: parseFloat(variant.price),
+          stock: parseInt(variant.stock, 10),
+          lowStockThreshold: parseInt(variant.lowStockThreshold || "10", 10),
+          attributes,
+          images: imageUrls,
         };
       });
 
+      // Create product
       const product = await this.productService.createProduct({
         name,
         description,
-        isNew,
-        isTrending,
-        isBestSeller,
-        isFeatured,
+        isNew: isNew === "true",
+        isTrending: isTrending === "true",
+        isBestSeller: isBestSeller === "true",
+        isFeatured: isFeatured === "true",
         categoryId,
         variants: processedVariants,
       });
 
+      // Send response
       res.status(201).json({
         status: "success",
         data: { product },
@@ -211,6 +151,73 @@ export class ProductController {
       });
     }
   );
+
+  // createProduct = asyncHandler(
+  //   async (req: Request, res: Response): Promise<void> => {
+  //     const {
+  //       name,
+  //       description,
+  //       isNew,
+  //       isTrending,
+  //       isBestSeller,
+  //       isFeatured,
+  //       categoryId,
+  //       variants,
+  //     } = req.body;
+
+  //     console.log("req.body:", JSON.stringify(req.body, null, 2));
+
+  //     if (!Array.isArray(variants) || variants.length === 0) {
+  //       throw new AppError(400, "At least one variant is required");
+  //     }
+
+  //     // No JSON.parse
+  //     // No imageIndexes
+  //     // No Cloudinary upload
+  //     // Images must already be URLs
+
+  //     const processedVariants = variants.map((variant: any, index: number) => {
+  //       let attributes = variant.attributes;
+
+  //       if (typeof attributes === "string") {
+  //         attributes = JSON.parse(attributes);
+  //       }
+
+  //       if (!Array.isArray(attributes)) {
+  //         throw new AppError(
+  //           400,
+  //           `Attributes must be array in variant ${index}`
+  //         );
+  //       }
+
+  //       return {
+  //         ...variant,
+  //         attributes,
+  //         price: Number(variant.price),
+  //         stock: Number(variant.stock),
+  //         lowStockThreshold: Number(variant.lowStockThreshold ?? 10),
+  //         images: variant.images || [],
+  //       };
+  //     });
+
+  //     const product = await this.productService.createProduct({
+  //       name,
+  //       description,
+  //       isNew,
+  //       isTrending,
+  //       isBestSeller,
+  //       isFeatured,
+  //       categoryId,
+  //       variants: processedVariants,
+  //     });
+
+  //     res.status(201).json({
+  //       status: "success",
+  //       data: { product },
+  //       message: "Product created successfully",
+  //     });
+  //   }
+  // );
 
   updateProduct = asyncHandler(
     async (req: Request, res: Response): Promise<void> => {

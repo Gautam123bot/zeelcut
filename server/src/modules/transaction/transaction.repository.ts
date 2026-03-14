@@ -17,7 +17,25 @@ export class TransactionRepository {
             shipment: true,
             user: true,
             address: true,
-            orderItems: true,
+            orderItems: {
+            include: {
+              variant: {
+                include: {
+                  product: {
+                    include: {
+                      category: true,
+                      reviews: true,
+                    },
+                  },
+                  attributes: {
+                    include: {
+                      attribute: true,
+                      value: true,
+                    },
+                  },
+                },
+              },
+            },},
           },
         },
       },

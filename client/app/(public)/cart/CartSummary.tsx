@@ -92,7 +92,6 @@ const CartSummary: React.FC<CartSummaryProps> = ({
         description: "Order Payment",
         handler: async function (response: any) {
           try {
-            debugger
             // 🔥 Call your backend to verify payment
             await verifyPayment({
               razorpay_order_id: response.razorpay_order_id,

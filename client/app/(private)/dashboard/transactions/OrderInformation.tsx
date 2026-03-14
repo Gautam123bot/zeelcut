@@ -44,7 +44,7 @@ const OrderInformation = ({ order, className = "" }) => {
                   Item ID
                 </th>
                 <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Product ID
+                  Product Variant ID
                 </th>
                 <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Quantity
@@ -55,22 +55,22 @@ const OrderInformation = ({ order, className = "" }) => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {order.orderItems.map((item) => (
+              {order?.orderItems.map((item) => (
                 <tr
-                  key={item.id}
+                  key={item?.id}
                   className="hover:bg-gray-50 transition-colors duration-150"
                 >
                   <td className="px-3 py-4 whitespace-nowrap text-sm font-mono">
-                    {item.id.substring(0, 8)}...
+                    {item?.id?.substring(0, 8) || "N/A"}...
                   </td>
                   <td className="px-3 py-4 whitespace-nowrap text-sm font-mono">
-                    {item.productId.substring(0, 8)}...
+                    {item?.variantId?.substring(0, 8) || "N/A"}...
                   </td>
                   <td className="px-3 py-4 whitespace-nowrap text-sm">
-                    {item.quantity}
+                    {item?.quantity}
                   </td>
                   <td className="px-3 py-4 whitespace-nowrap text-sm">
-                    {format(item.price)}
+                    {format(item?.price)}
                   </td>
                 </tr>
               ))}
