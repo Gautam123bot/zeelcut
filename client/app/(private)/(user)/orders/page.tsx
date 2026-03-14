@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 import {
   Package,
   Calendar,
-  DollarSign,
+  // DollarSign,
   ShoppingBag,
   Clock,
   CheckCircle,
